@@ -1,0 +1,56 @@
+// === SIGNATURE (global) ===
+function setCanvasSize(id, w=300, h=100) {
+  const c = document.getElementById(id);
+  const dpr = window.devicePixelRatio || 1;
+  c.width  = Math.floor(w * dpr);
+  c.height = Math.floor(h * dpr);
+  c.style.width = w + 'px';
+  c.style.height = h + 'px';
+  const ctx = c.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#000';
+}
+
+function clearPad(id) {
+  const c = document.getElementById(id);
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+}
+
+function enableDrawing(id) {
+  const canvas = document.getElementById(id);
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+
+  const pos = (e) => {
+    const r = canvas.getBoundingClientRect();
+    const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+    const y = (e.touches ? e.touches[0].clientY : e.clientY) - r.top;
+    return { x, y };
+  };
+
+  const start = (e) => { drawing = true; const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); e.preventDefault(); };
+  const move  = (e) => { if (!drawing) return; const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); e.preventDefault(); };
+  const end   = () => { drawing = false; };
+
+  // mouse
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  canvas.addEventListener('mouseup', end);
+  canvas.addEventListener('mouseleave', end);
+  // touch
+  canvas.addEventListener('touchstart', start, { passive:false });
+  canvas.addEventListener('touchmove',  move,  { passive:false });
+  canvas.addEventListener('touchend',   end);
+}
+
+// expose ke global utk dipanggil dari onclick
+window.clearPad = clearPad;
+
+(function init() {
+  // jalan setelah file dimuat (posisi include di akhir <body>, jadi DOM sudah siap)
+  setCanvasSize('ttdTeknisi', 300, 100);
+  setCanvasSize('ttdManager', 300, 100);
+  enableDrawing('ttdTeknisi');
+  enableDrawing('ttdManager');
+})();
