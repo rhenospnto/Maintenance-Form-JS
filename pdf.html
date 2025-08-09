@@ -1,0 +1,102 @@
+// === PDF (global) ===
+(function () {
+  if (!window.html2canvas) {
+    console.error('html2canvas belum siap');
+  }
+  if (!window.jspdf) {
+    console.error('jsPDF belum siap');
+  }
+})();
+
+function makePDFfromContent(node) {
+  // lebih cepat: scale 1.25 + JPEG
+  return html2canvas(node, { scale: 1.25, useCORS: true, backgroundColor: '#ffffff' })
+    .then((canvas) => {
+      const { jsPDF } = (window.jspdf || {});
+      if (!jsPDF) throw new Error('jsPDF tidak tersedia');
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.92);
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+
+      const imgProps = pdf.getImageProperties(imgData);
+      const imgW = pageW;
+      const imgH = (imgProps.height * imgW) / imgProps.width;
+
+      if (imgH <= pageH) {
+        pdf.addImage(imgData, 'JPEG', 0, 0, imgW, imgH, undefined, 'FAST');
+      } else {
+        const scale = pageH / imgH;
+        const w = imgW * scale;
+        const x = (pageW - w) / 2;
+        pdf.addImage(imgData, 'JPEG', x, 0, w, pageH, undefined, 'FAST');
+      }
+      return pdf;
+    });
+}
+
+function previewPDF() {
+  const node = document.getElementById('form-content');
+  const status = document.getElementById('status');
+  if (!node) return alert('Form belum siap.');
+  status && (status.textContent = 'Membuat preview...');
+  makePDFfromContent(node).then((pdf) => {
+    status && (status.textContent = '');
+    // beberapa browser blokir popup — izinkan pop‑up kalau tidak muncul
+    pdf.output('dataurlnewwindow');
+  }).catch((e) => {
+    status && (status.textContent = '❌ Gagal preview: ' + e);
+    console.error(e);
+  });
+}
+
+function generateAndUploadPDF() {
+  const status  = document.getElementById('status');
+  const store   = document.getElementById('store').value.trim();
+  const tanggal = document.getElementById('tanggal').value;
+  const teknisi = document.getElementById('teknisi').value.trim();
+
+  if (!store || !tanggal || !teknisi) {
+    status && (status.textContent = '❗ Lengkapi Store / Tanggal / Teknisi dulu.');
+    return;
+  }
+
+  status && (status.textContent = 'Sedang membuat & mengunggah PDF...');
+  const node = document.getElementById('form-content');
+
+  makePDFfromContent(node).then((pdf) => {
+    const blob = pdf.output('blob');
+    const reader = new FileReader();
+    reader.onloadend = function () {
+      try {
+        const base64data = reader.result.split(',')[1];
+        const fileName = `Maintenance_${new Date().toISOString()}.pdf`;
+
+        google.script.run
+          .withSuccessHandler((res) => {
+            if (res && res.success) {
+              status && (status.innerHTML = `✅ Berhasil: <a href="${res.url}" target="_blank">Lihat PDF</a>`);
+            } else {
+              status && (status.textContent = '❌ Gagal unggah: ' + (res && res.error ? res.error : 'Unknown error'));
+            }
+          })
+          .withFailureHandler((err) => {
+            status && (status.textContent = '❌ Gagal panggil server: ' + err);
+          })
+          .uploadPDF(base64data, fileName, store, tanggal, teknisi);
+      } catch (e) {
+        status && (status.textContent = '❌ Gagal proses blob/base64: ' + e);
+        console.error(e);
+      }
+    };
+    reader.readAsDataURL(blob);
+  }).catch((e) => {
+    status && (status.textContent = '❌ Gagal buat PDF: ' + e);
+    console.error(e);
+  });
+}
+
+// expose ke global utk onclick
+window.previewPDF = previewPDF;
+window.generateAndUploadPDF = generateAndUploadPDF;
