@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <base target="_top">
+  <title>Form Maintenance Store</title>
+
+  <!-- libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    :root { --gap: 12px; }
+    body { font-family: Arial, sans-serif; font-size: 10pt; margin: 20px; color:#111; }
+    h2 { text-align:center; margin: 0 0 12px; }
+    label.inline { display:inline-block; min-width: 140px; }
+    input[type="text"], input[type="date"] { width: 320px; max-width:100%; padding:6px 8px; margin:4px 0 10px; border:1px solid #bbb; border-radius:4px; }
+    .scroll-table { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; font-size:10pt; }
+    thead th { background:#f5f5f5; }
+    th, td { border:1px solid #999; padding:4px; vertical-align:top; }
+    .signature-container { display:flex; gap:var(--gap); justify-content:space-between; margin-top:18px; flex-wrap:wrap; }
+    .signature-box { width:300px; height:100px; border:1px solid #000; margin-top:8px; border-radius:4px; background:#fff; }
+    .actions { display:flex; gap:var(--gap); align-items:center; flex-wrap:wrap; margin-top:14px; }
+    button { cursor:pointer; padding:10px 14px; border-radius:6px; border:1px solid #222; background:#fff; }
+    #status { min-height:20px; }
+    @media (max-width:768px){ body{font-size:11pt; margin:12px;} table{font-size:9pt;} .signature-box{width:100%; height:120px;} .signature-container{flex-direction:column;} }
+  </style>
+</head>
+<body>
+  <h2>FORM MAINTENANCE STORE</h2>
+
+  <div class="controls">
+    <div><label class="inline">Nama Store:</label> <input type="text" id="store" placeholder="Contoh: Hokben Grand Kota Bintang"></div>
+    <div><label class="inline">Tanggal Maintenance:</label> <input type="date" id="tanggal"></div>
+    <div><label class="inline">Technical Support:</label> <input type="text" id="teknisi" placeholder="Contoh: Rheno Septianto"></div>
+  </div>
+
+  <div id="form-content">
+    <div class="scroll-table">
+      <table>
+        <thead>
+          <tr><th>No</th><th>Lokasi</th><th>Hardware</th><th>Merk & SN</th><th>Panduan</th><th>Kondisi</th><th>Keterangan</th></tr>
+        </thead>
+        <tbody>
+    <tr>
+      <td>1</td>
+      <td>Back Office</td>
+      <td>PC</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Cleaning PC, update antivirus, cek keyboard & mouse, pastikan aplikasi berjalan (HSIS, LPS, dll), update database (store, storedb & posdb)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td></td>
+      <td>Monitor</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan monitor berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>3</td>
+      <td></td>
+      <td>UPS</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan UPS berfungsi (backup daya)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>4</td>
+      <td></td>
+      <td>Printer Inkjet</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan print berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>5</td>
+      <td></td>
+      <td>Finger Print</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan mesin berfungsi baik (tombol pad, sensor & koneksi)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>6</td>
+      <td></td>
+      <td>PC Server</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan PC server berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>7</td>
+      <td></td>
+      <td>Kabel / Wire</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Merapikan instalasi kabel jaringan & power</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>8</td>
+      <td>Counter</td>
+      <td>POS 1</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Aplikasi POS berfungsi dan versi update, touch screen berfungsi</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>9</td>
+      <td></td>
+      <td>Printer Thermal</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan hasil print struk baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>10</td>
+      <td></td>
+      <td>UPS</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan UPS berfungsi (backup daya)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>11</td>
+      <td></td>
+      <td>Customer Display</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan image sesuai promo</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>12</td>
+      <td></td>
+      <td>POS 2</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Aplikasi POS berfungsi dan versi update, touch screen berfungsi</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>13</td>
+      <td></td>
+      <td>Printer Thermal</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan hasil print struk baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>14</td>
+      <td></td>
+      <td>UPS</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan UPS berfungsi (backup daya)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>15</td>
+      <td></td>
+      <td>Customer Display</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan image sesuai promo</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>16</td>
+      <td></td>
+      <td>POS 3</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Aplikasi POS berfungsi dan versi update, touch screen berfungsi</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>17</td>
+      <td></td>
+      <td>Printer Thermal</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan hasil print struk baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>18</td>
+      <td></td>
+      <td>UPS</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan UPS berfungsi (backup daya)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>19</td>
+      <td></td>
+      <td>Customer Display</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan image sesuai promo</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>20</td>
+      <td></td>
+      <td>POS 4</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Aplikasi POS berfungsi dan versi update, touch screen berfungsi</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>21</td>
+      <td></td>
+      <td>Printer Thermal</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan hasil print struk baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>22</td>
+      <td></td>
+      <td>UPS</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan UPS berfungsi (backup daya)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>23</td>
+      <td></td>
+      <td>Customer Display</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan image sesuai promo</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>24</td>
+      <td></td>
+      <td>POS Booth</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Aplikasi POS berfungsi dan versi update, touch screen berfungsi</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>25</td>
+      <td></td>
+      <td>Printer Thermal</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan hasil print struk baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>26</td>
+      <td></td>
+      <td>UPS</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan UPS berfungsi (backup daya)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>27</td>
+      <td></td>
+      <td>Customer Display</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan image sesuai promo</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>28</td>
+      <td></td>
+      <td>Mini PC New Counter</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan aplikasi berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>29</td>
+      <td></td>
+      <td>Monitor Packer</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan monitor berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>30</td>
+      <td></td>
+      <td>Monitor Customer / No Antrian</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan monitor berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>31</td>
+      <td></td>
+      <td>UPS</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan UPS berfungsi (backup daya)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>32</td>
+      <td>Kitchen</td>
+      <td>Mini PC Osds</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan aplikasi sesuai</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>33</td>
+      <td></td>
+      <td>Printer Thermal</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan hasil print baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>34</td>
+      <td></td>
+      <td>UPS</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan UPS berfungsi (backup daya)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>35</td>
+      <td></td>
+      <td>Monitor OSDS</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan monitor berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>36</td>
+      <td></td>
+      <td>Mini PC Packer Kitchen</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan UPS berfungsi (backup daya)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>37</td>
+      <td></td>
+      <td>Monitor Packer Kitchen</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan monitor berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>38</td>
+      <td>Lobby</td>
+      <td>Kios K 1</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Aplikasi POS berfungsi dan versi update, touch screen berfungsi</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>39</td>
+      <td></td>
+      <td>UPS</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan UPS berfungsi (backup daya)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>40</td>
+      <td></td>
+      <td>Kios K 2</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Aplikasi POS berfungsi dan versi update, touch screen berfungsi</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>41</td>
+      <td></td>
+      <td>UPS</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan UPS berfungsi (backup daya)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>42</td>
+      <td></td>
+      <td>Kios K 3</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Aplikasi POS berfungsi dan versi update, touch screen berfungsi</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>43</td>
+      <td></td>
+      <td>UPS</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan UPS berfungsi (backup daya)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>44</td>
+      <td>Drive Thru</td>
+      <td>Mini PC Kios</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan aplikasi sesuai</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>45</td>
+      <td></td>
+      <td>Monitor Kasir</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan monitor berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>46</td>
+      <td></td>
+      <td>Monitor Packer</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan monitor berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>47</td>
+      <td></td>
+      <td>Perangkat Audio</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan audio & microphone berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>48</td>
+      <td></td>
+      <td>KIOS K DT 1</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Aplikasi POS berfungsi dan versi update, touch screen berfungsi</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>49</td>
+      <td></td>
+      <td>UPS</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan UPS berfungsi (backup daya)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>50</td>
+      <td></td>
+      <td>KIOS K DT 2</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Aplikasi POS berfungsi dan versi update, touch screen berfungsi</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>51</td>
+      <td></td>
+      <td>UPS</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan UPS berfungsi (backup daya)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>52</td>
+      <td>Drive In</td>
+      <td>Mini PC Drive In</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan aplikasi sesuai</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>53</td>
+      <td></td>
+      <td>Monitor Drive In</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan monitor berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>54</td>
+      <td></td>
+      <td>Monitor Packer 1</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan monitor berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>55</td>
+      <td></td>
+      <td>Monitor Packer 2</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan monitor berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>56</td>
+      <td></td>
+      <td>Perangkat Audio</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan audio & microphone berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>57</td>
+      <td>Inventory Management</td>
+      <td>Kitchen Display System 1</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan aplikasi sesuai</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>58</td>
+      <td></td>
+      <td>Kitchen Display System 2</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan aplikasi sesuai</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>59</td>
+      <td></td>
+      <td>Kitchen Display System 3</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan aplikasi sesuai</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>60</td>
+      <td></td>
+      <td>Kitchen Display System 4</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan aplikasi sesuai</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>61</td>
+      <td></td>
+      <td>Kitchen Display System 5</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan aplikasi sesuai</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>62</td>
+      <td>Jaringan</td>
+      <td>SDWAN</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Kecepatan internet sesuai dan koneksi baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>63</td>
+      <td></td>
+      <td>VPN</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Kecepatan internet sesuai dan koneksi baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>64</td>
+      <td></td>
+      <td>Access Point</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan dapat difungsikan dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>65</td>
+      <td></td>
+      <td>Back Office</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Seluruh perangkat terhubung ke BO & aplikasi jaringan berfungsi</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>66</td>
+      <td></td>
+      <td>Counter</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>-</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>67</td>
+      <td></td>
+      <td>Kitchen</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>-</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>68</td>
+      <td></td>
+      <td>IP Phone</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>-</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>69</td>
+      <td></td>
+      <td>Drive Thru</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>-</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>70</td>
+      <td>CCTV</td>
+      <td>Kamera</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan semua kamera berfungsi</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>71</td>
+      <td></td>
+      <td>DVR / NVR</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Cek recording dan kapasitas penyimpanan (HD 2TB - file 2 minggu)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>72</td>
+      <td></td>
+      <td>UPS</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan UPS berfungsi (backup daya)</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+    <tr>
+      <td>73</td>
+      <td></td>
+      <td>Monitor</td>
+      <td><input type="text" placeholder="Merk & SN"></td>
+      <td>Memastikan monitor berfungsi dengan baik</td>
+      <td><label><input type="checkbox"> Baik</label><br><label><input type="checkbox"> Tidak Baik</label></td>
+      <td><input type="text" placeholder="Keterangan"></td>
+    </tr>
+    
+  </tbody>
+</table>
+
+<div class="signature-container">
+        <div>
+          <p><strong>Technical Support</strong></p>
+          <canvas id="ttdTeknisi" class="signature-box"></canvas><br>
+          <button type="button" onclick="clearPad('ttdTeknisi')">Clear</button>
+        </div>
+        <div>
+          <p><strong>Store Manager</strong></p>
+          <canvas id="ttdManager" class="signature-box"></canvas><br>
+          <button type="button" onclick="clearPad('ttdManager')">Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button type="button" onclick="previewPDF()">🖨️ Preview PDF</button>
+    <button type="button" onclick="generateAndUploadPDF()">☁️ Upload PDF ke Drive</button>
+    <span id="status"></span>
+  </div>
+
+  <!-- sisipkan file JS terpisah -->
+  <script>
+    <?!= include('signature'); ?>
+  </script>
+  <script>
+    <?!= include('pdf'); ?>
+  </script>
+</body>
+</html>
